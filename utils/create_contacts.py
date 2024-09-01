@@ -56,4 +56,4 @@
 #         )
 
 #     if len(django_contacts) > 0:
-#         Contact.objects.bulk_create(django_contacts)
+#         Contact.objects.bulk_create(django_contacts)]
