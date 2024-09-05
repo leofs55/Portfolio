@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from agenda.forms import ContactForm
 from agenda.models import Contact
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url='agenda:login')
 def create(request):
     form_action = reverse('agenda:create')
     if request.method == 'POST':
@@ -13,7 +15,9 @@ def create(request):
             'form_action': form_action
         }
         if form.is_valid():
-            contact = form.save()
+            contact = form.save(commit=False)
+            contact.owner = request.user
+            contact.save()
             return redirect('agenda:update', contact_id=contact.pk)
 
         return render(request, 'agenda/create.html', context)
@@ -25,8 +29,10 @@ def create(request):
     return render(request, 'agenda/create.html', context)
 
 
+@login_required(login_url='agenda:login')
 def update(request, contact_id):
-    contact = get_object_or_404(Contact, pk=contact_id, show=True)
+    contact = get_object_or_404(Contact, pk=contact_id, show=True,
+                                owner=request.user)
     form_action = reverse('agenda:update', args=(contact_id,))
 
     if request.method == 'POST':
@@ -51,8 +57,10 @@ def update(request, contact_id):
     return render(request, 'agenda/create.html', context)
 
 
+@login_required(login_url='agenda:login')
 def delete(request, contact_id):
-    contact = get_object_or_404(Contact, pk=contact_id, show=True)
+    contact = get_object_or_404(Contact, pk=contact_id, show=True,
+                                owner=request.user)
     confirmation = request.POST.get('confirmation', 'no')
 
     if confirmation == 'yes':
