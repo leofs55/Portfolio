@@ -20,7 +20,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('', include('agenda.urls')),
+    path('', include('home.urls')),
+    path('library/', include('library.urls')),
+    path('agenda/', include('agenda.urls')),
     path('admin/', admin.site.urls),
 ]
 

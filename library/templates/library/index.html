@@ -1,0 +1,24 @@
+{% extends "global/base_library.html" %}
+{% load static %}
+{% block content %}
+    <h2>Olá, seja bem vindo ao Op-Library</h2>
+    <p>
+        aqui você poderá criar postagens sobres suas leituras, 
+        descrever sua opnião sobre um determinado livro, que leu, 
+        está lendo ou gostaria de começar a ler. Então fique avontade!
+    </p>
+
+    {% for owner, books in books_per_owner %}
+        <h2>Livros de: {{owner}}</h2>
+        <div class="cards">
+            {% for book in books %}
+                <div class='card'>
+                    <h3>{{book.title}}</h3>
+                    <img src="{{ book.pictures.url }}" alt="#">
+                </div>
+            {% endfor %}
+            <button class="carousel-prev">Anterior</button>
+            <button class="carousel-next">Próximo</button>
+        </div>
+    {% endfor %}
+{% endblock content %}
